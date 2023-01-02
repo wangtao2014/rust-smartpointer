@@ -66,14 +66,27 @@ pub fn test_drop() {
 fn main() {
     // test_deref();
     test_rc();
+    // test_box1();
+    test_rc1();
 }
 
-use List::Cons;
-use List::Nil;
+use crate::List::Cons;
+use crate::List::Nil;
 use std::rc::Rc;
 
+// enum List1 {
+//     Cons(i32, Box<List1>),
+//     Nil,
+// }
+
+// fn test_box1() {
+//     let a:List1 = Cons(12, Box::new(Cons(13, Box::new(Nil))));
+//     let b:List1 = Cons(14, Box::new(a));
+//     let c:List1 = Cons(14, Box::new(a));
+// }
+
 enum List {
-    Cons (i32, Rc<List>),
+    Cons(i32, Rc<List>),
     Nil,
 }
 
@@ -90,5 +103,11 @@ pub fn test_rc() {
         println!("count after creating c = {}", Rc::strong_count(&a));
     }
     println!("count after c goes out of scope = {}", Rc::strong_count(&a));
+}
+
+pub fn test_rc1() {
+    let five = Rc::new(5);
+    let _also_five = Rc::clone(&five);
+    assert_eq!(2, Rc::strong_count(&_also_five));
 }
 
